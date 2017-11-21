@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  roadtripmongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
