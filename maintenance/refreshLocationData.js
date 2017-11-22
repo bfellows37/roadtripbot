@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost:27017/roadtrip', {useMongoClient: true});
 
 console.log('starting');
 
-const stuff = fs.readFileSync('../data/npspoi/poi.geojson');
+const stuff = fs.readFileSync('data/npspoi/poi.geojson');
 
 stuffJson = JSON.parse(stuff);
 features = stuffJson.features.filter(x=>{
@@ -45,12 +45,28 @@ Location.remove({})
   })
   .then((results) => {
     console.log(`all done, imported ${results.length}, here's a sample`);
-    console.log(results[parseInt(Math.random()*100)]);
+    const rand = parseInt(Math.random()*100);
+    console.log(results[rand]);
 
-    mongoose.disconnect();
+    werd(results[rand]);
   })
   .catch(e => {
     console.log(e);
   });
+
+const werd = (randResult) => {
+
+  Location.find({gps: {
+    $near: {
+      $geometry: randResult.gps,
+      $minDistance: 160000,
+      $maxDistance: 180000
+    }
+  }}, (error, locations) => {
+    console.log(locations[0]);
+
+    mongoose.disconnect();
+  });
+};
 
 console.log('kicked off the party');

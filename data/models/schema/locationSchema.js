@@ -30,5 +30,6 @@ const locationSchema = mongoose.Schema({
   gps: geoSchema
 });
 
+locationSchema.index({gps: '2dsphere'});
 
 module.exports = exports = locationSchema;
